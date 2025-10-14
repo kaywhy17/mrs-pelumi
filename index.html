@@ -1,0 +1,1242 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>The Candleverse - Discover Your Flame</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700&family=Poppins:wght@300;400;500;600&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary-color: #D4AF37;
+            --secondary-color: #8B4513;
+            --light-bg: #FFF8F0;
+            --light-text: #333333;
+            --dark-bg: #121212;
+            --dark-text: #F5F5F5;
+            --card-bg-light: rgba(255, 255, 255, 0.7);
+            --card-bg-dark: rgba(30, 30, 30, 0.7);
+            --transition-speed: 0.5s;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Poppins', sans-serif;
+            background-color: var(--light-bg);
+            color: var(--light-text);
+            overflow-x: hidden;
+            transition: background-color var(--transition-speed), color var(--transition-speed);
+            cursor: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 16 16"><circle cx="8" cy="8" r="5" fill="%23D4AF37" opacity="0.7"/></svg>') 8 8, auto;
+        }
+
+        body.dark-mode {
+            background-color: var(--dark-bg);
+            color: var(--dark-text);
+        }
+
+        /* Custom Cursor Glow Effect */
+        .cursor-glow {
+            position: fixed;
+            width: 20px;
+            height: 20px;
+            border-radius: 50%;
+            background-color: rgba(212, 175, 55, 0.3);
+            pointer-events: none;
+            z-index: 9999;
+            transition: transform 0.1s ease;
+            transform: translate(-50%, -50%);
+        }
+
+        /* Navigation */
+        .nav-dock {
+            position: fixed;
+            bottom: 30px;
+            left: 50%;
+            transform: translateX(-50%);
+            background-color: rgba(255, 255, 255, 0.8);
+            backdrop-filter: blur(10px);
+            border-radius: 50px;
+            padding: 10px 20px;
+            display: flex;
+            gap: 30px;
+            z-index: 100;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+            transition: all var(--transition-speed);
+        }
+
+        body.dark-mode .nav-dock {
+            background-color: rgba(30, 30, 30, 0.8);
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+        }
+
+        .nav-dock a {
+            text-decoration: none;
+            color: var(--light-text);
+            font-weight: 500;
+            font-size: 14px;
+            transition: color 0.3s;
+        }
+
+        body.dark-mode .nav-dock a {
+            color: var(--dark-text);
+        }
+
+        .nav-dock a:hover {
+            color: var(--primary-color);
+        }
+
+        /* Light/Dark Mode Toggle */
+        .theme-toggle {
+            position: fixed;
+            top: 30px;
+            right: 30px;
+            width: 60px;
+            height: 30px;
+            background-color: #ccc;
+            border-radius: 50px;
+            cursor: pointer;
+            z-index: 100;
+            overflow: hidden;
+            transition: background-color 0.3s;
+        }
+
+        body.dark-mode .theme-toggle {
+            background-color: #444;
+        }
+
+        .theme-toggle-slider {
+            position: absolute;
+            top: 3px;
+            left: 3px;
+            width: 24px;
+            height: 24px;
+            background-color: white;
+            border-radius: 50%;
+            transition: transform 0.3s;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        body.dark-mode .theme-toggle-slider {
+            transform: translateX(30px);
+        }
+
+        .theme-toggle i {
+            font-size: 14px;
+            color: var(--secondary-color);
+        }
+
+        /* Hero Section */
+        .hero {
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            position: relative;
+            overflow: hidden;
+            padding: 80px 20px 120px;
+        }
+
+        .hero-bg {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: radial-gradient(circle at center, rgba(212, 175, 55, 0.2) 0%, rgba(212, 175, 55, 0) 70%);
+            z-index: -1;
+            transition: all var(--transition-speed);
+        }
+
+        body.dark-mode .hero-bg {
+            background: radial-gradient(circle at center, rgba(212, 175, 55, 0.1) 0%, rgba(212, 175, 55, 0) 70%);
+        }
+
+        .hero-candle {
+            width: 200px;
+            height: 300px;
+            position: relative;
+            margin-bottom: 40px;
+            margin-top: 50px;
+            animation: float 6s ease-in-out infinite;
+        }
+
+        @keyframes float {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(30px); }
+        }
+
+        .candle-body {
+            width: 100%;
+            height: 250px;
+            background: linear-gradient(to bottom, #f5f5f5, #e0e0e0);
+            border-radius: 10px 10px 50px 50px;
+            position: relative;
+            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1);
+            overflow: hidden;
+        }
+
+        .candle-body::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(135deg, rgba(255, 255, 255, 0.5) 0%, rgba(255, 255, 255, 0) 50%);
+        }
+
+        .candle-wick {
+            width: 10px;
+            height: 30px;
+            background-color: #333;
+            position: absolute;
+            top: -30px;
+            left: 50%;
+            transform: translateX(-50%);
+            border-radius: 5px 5px 0 0;
+        }
+
+        .candle-flame {
+            width: 40px;
+            height: 60px;
+            background: radial-gradient(ellipse at bottom, #FFD700 0%, #FFA500 70%, rgba(255, 69, 0, 0) 100%);
+            position: absolute;
+            top: -90px;
+            left: 50%;
+            transform: translateX(-50%);
+            border-radius: 50% 50% 50% 50% / 60% 60% 40% 40%;
+            animation: flicker 1.5s ease-in-out infinite alternate;
+            box-shadow: 0 0 20px rgba(255, 215, 0, 0.7);
+        }
+
+        @keyframes flicker {
+            0%, 100% { transform: translateX(-50%) scale(1); opacity: 1; }
+            50% { transform: translateX(-50%) scale(1.05); opacity: 0.8; }
+        }
+
+        .hero h1 {
+            font-family: 'Playfair Display', serif;
+            font-size: clamp(2rem, 5vw, 3.5rem);
+            margin-bottom: 20px;
+            text-align: center;
+            background: linear-gradient(45deg, var(--primary-color), var(--secondary-color));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .hero p {
+            font-size: clamp(1rem, 2.5vw, 1.2rem);
+            margin-bottom: 30px;
+            text-align: center;
+            max-width: 600px;
+        }
+
+        .cta-button {
+            background-color: var(--primary-color);
+            color: white;
+            border: none;
+            padding: 15px 40px;
+            font-size: 1rem;
+            font-weight: 600;
+            border-radius: 50px;
+            cursor: pointer;
+            transition: all 0.3s;
+            box-shadow: 0 5px 15px rgba(212, 175, 55, 0.3);
+            margin-bottom: 20px;
+        }
+
+        .cta-button:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 8px 20px rgba(212, 175, 55, 0.4);
+        }
+
+        /* Products Section */
+        .products {
+            padding: 80px 20px;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .section-title {
+            font-family: 'Playfair Display', serif;
+            font-size: clamp(1.8rem, 4vw, 2.5rem);
+            text-align: center;
+            margin-bottom: 60px;
+            position: relative;
+        }
+
+        .section-title::after {
+            content: '';
+            position: absolute;
+            bottom: -15px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 80px;
+            height: 3px;
+            background-color: var(--primary-color);
+        }
+
+        .product-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+            gap: 30px;
+        }
+
+        .product-card {
+            background-color: var(--card-bg-light);
+            border-radius: 20px;
+            overflow: hidden;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+            transition: all 0.3s;
+            position: relative;
+        }
+
+        body.dark-mode .product-card {
+            background-color: var(--card-bg-dark);
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+        }
+
+        .product-card:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 15px 40px rgba(0, 0, 0, 0.15);
+        }
+
+        .product-image {
+            height: 220px;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .product-image img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            transition: transform 0.5s;
+        }
+
+        .product-card:hover .product-image img {
+            transform: scale(1.05);
+        }
+
+        .product-badge {
+            position: absolute;
+            top: 15px;
+            right: 15px;
+            background-color: var(--primary-color);
+            color: white;
+            padding: 5px 15px;
+            border-radius: 20px;
+            font-size: 0.8rem;
+            font-weight: 600;
+        }
+
+        .product-info {
+            padding: 20px;
+        }
+
+        .product-name {
+            font-family: 'Playfair Display', serif;
+            font-size: clamp(1.2rem, 3vw, 1.5rem);
+            margin-bottom: 10px;
+        }
+
+        .product-description {
+            margin-bottom: 15px;
+            color: #666;
+            font-size: 0.9rem;
+        }
+
+        body.dark-mode .product-description {
+            color: #AAA;
+        }
+
+        .product-price {
+            font-size: clamp(1.1rem, 2.5vw, 1.3rem);
+            font-weight: 600;
+            margin-bottom: 15px;
+            color: var(--primary-color);
+        }
+
+        /* Candle Selection Dropdown */
+        .candle-selection {
+            margin-bottom: 0;
+        }
+
+        .candle-selection label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 500;
+            font-size: 0.9rem;
+        }
+
+        .candle-dropdown {
+            width: 100%;
+            padding: 10px 15px;
+            border-radius: 8px;
+            border: 1px solid #ddd;
+            background-color: white;
+            font-size: 0.9rem;
+            color: var(--light-text);
+            transition: border-color 0.3s;
+        }
+
+        body.dark-mode .candle-dropdown {
+            background-color: #333;
+            border-color: #555;
+            color: var(--dark-text);
+        }
+
+        .candle-dropdown:focus {
+            outline: none;
+            border-color: var(--primary-color);
+        }
+
+        /* About Section */
+        .about {
+            padding: 80px 20px;
+            background-color: rgba(212, 175, 55, 0.05);
+            transition: background-color var(--transition-speed);
+        }
+
+        body.dark-mode .about {
+            background-color: rgba(212, 175, 55, 0.02);
+        }
+
+        .about-container {
+            max-width: 800px;
+            margin: 0 auto;
+            text-align: center;
+        }
+
+        .about p {
+            font-size: clamp(1rem, 2.5vw, 1.1rem);
+            line-height: 1.8;
+            margin-bottom: 30px;
+        }
+
+        /* Instagram Section */
+        .instagram {
+            padding: 80px 20px;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .instagram-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+            gap: 15px;
+            margin-bottom: 30px;
+        }
+
+        .instagram-item {
+            position: relative;
+            height: 200px;
+            border-radius: 15px;
+            overflow: hidden;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+            transition: all 0.3s;
+        }
+
+        .instagram-item:hover {
+            transform: scale(1.03);
+            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.15);
+        }
+
+        .instagram-item img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        .instagram-overlay {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.7);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            opacity: 0;
+            transition: opacity 0.3s;
+        }
+
+        .instagram-item:hover .instagram-overlay {
+            opacity: 1;
+        }
+
+        .instagram-overlay i {
+            color: white;
+            font-size: 2rem;
+        }
+
+        .instagram-button {
+            display: block;
+            width: 200px;
+            margin: 0 auto;
+            background: linear-gradient(45deg, #f09433 0%, #e6683c 25%, #dc2743 50%, #cc2366 75%, #bc1888 100%);
+            color: white;
+            text-align: center;
+            padding: 15px;
+            border-radius: 50px;
+            font-weight: 600;
+            text-decoration: none;
+            transition: transform 0.3s;
+        }
+
+        .instagram-button:hover {
+            transform: scale(1.05);
+        }
+
+        /* Footer */
+        footer {
+            padding: 50px 20px;
+            background-color: rgba(0, 0, 0, 0.05);
+            text-align: center;
+        }
+
+        body.dark-mode footer {
+            background-color: rgba(0, 0, 0, 0.2);
+        }
+
+        .footer-content {
+            max-width: 800px;
+            margin: 0 auto;
+        }
+
+        .social-links {
+            display: flex;
+            justify-content: center;
+            gap: 20px;
+            margin-bottom: 30px;
+        }
+
+        .social-links a {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background-color: var(--primary-color);
+            color: white;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: transform 0.3s;
+        }
+
+        .social-links a:hover {
+            transform: scale(1.1);
+        }
+
+        /* Smoke Animation */
+        .smoke {
+            position: fixed;
+            width: 100%;
+            height: 100%;
+            top: 0;
+            left: 0;
+            pointer-events: none;
+            z-index: 999;
+            opacity: 0;
+            transition: opacity 1s;
+        }
+
+        .smoke.active {
+            opacity: 1;
+        }
+
+        .smoke-particle {
+            position: absolute;
+            background-color: rgba(200, 200, 200, 0.7);
+            border-radius: 50%;
+            filter: blur(5px);
+            animation: smoke-rise 4s ease-out forwards;
+        }
+
+        @keyframes smoke-rise {
+            0% {
+                transform: translateY(0) scale(0.5);
+                opacity: 0.7;
+            }
+            100% {
+                transform: translateY(-200px) scale(2);
+                opacity: 0;
+            }
+        }
+
+        /* Responsive Design */
+        @media (max-width: 992px) {
+            .product-grid {
+                grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+                gap: 25px;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .nav-dock {
+                bottom: 20px;
+                padding: 8px 15px;
+                gap: 15px;
+                width: 90%;
+                max-width: 400px;
+            }
+
+            .nav-dock a {
+                font-size: 12px;
+            }
+
+            .theme-toggle {
+                top: 20px;
+                right: 20px;
+                width: 50px;
+                height: 25px;
+            }
+
+            .theme-toggle-slider {
+                width: 20px;
+                height: 20px;
+            }
+
+            body.dark-mode .theme-toggle-slider {
+                transform: translateX(25px);
+            }
+
+            .hero {
+                padding: 60px 20px 100px;
+            }
+
+            .hero-candle {
+                width: 150px;
+                height: 225px;
+                margin-top: 30px;
+            }
+
+            .candle-body {
+                height: 190px;
+            }
+
+            .candle-flame {
+                width: 30px;
+                height: 45px;
+                top: -70px;
+            }
+
+            .candle-wick {
+                height: 25px;
+                top: -25px;
+            }
+
+            .cta-button {
+                padding: 12px 30px;
+                font-size: 0.9rem;
+            }
+
+            .products, .about, .instagram {
+                padding: 60px 15px;
+            }
+
+            .product-grid {
+                grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+                gap: 20px;
+            }
+
+            .product-image {
+                height: 180px;
+            }
+
+            .product-info {
+                padding: 15px;
+            }
+
+            .instagram-grid {
+                grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+                gap: 10px;
+            }
+
+            .instagram-item {
+                height: 150px;
+            }
+
+            .social-links a {
+                width: 35px;
+                height: 35px;
+            }
+        }
+
+        @media (max-width: 576px) {
+            .nav-dock {
+                gap: 10px;
+                padding: 6px 12px;
+            }
+
+            .nav-dock a {
+                font-size: 11px;
+            }
+
+            .hero {
+                padding: 50px 15px 90px;
+            }
+
+            .hero-candle {
+                width: 120px;
+                height: 180px;
+            }
+
+            .candle-body {
+                height: 150px;
+            }
+
+            .candle-flame {
+                width: 25px;
+                height: 35px;
+                top: -55px;
+            }
+
+            .candle-wick {
+                height: 20px;
+                top: -20px;
+            }
+
+            .hero h1 {
+                margin-bottom: 15px;
+            }
+
+            .hero p {
+                margin-bottom: 20px;
+            }
+
+            .cta-button {
+                padding: 10px 25px;
+                font-size: 0.85rem;
+            }
+
+            .section-title {
+                margin-bottom: 40px;
+            }
+
+            .section-title::after {
+                bottom: -10px;
+                width: 60px;
+            }
+
+            .products, .about, .instagram {
+                padding: 50px 15px;
+            }
+
+            .product-grid {
+                grid-template-columns: 1fr;
+                gap: 25px;
+            }
+
+            .product-image {
+                height: 200px;
+            }
+
+            .product-name {
+                font-size: 1.3rem;
+            }
+
+            .product-description {
+                font-size: 0.85rem;
+            }
+
+            .product-price {
+                font-size: 1.1rem;
+            }
+
+            .candle-selection label {
+                font-size: 0.85rem;
+            }
+
+            .candle-dropdown {
+                padding: 8px 12px;
+                font-size: 0.85rem;
+            }
+
+            .instagram-grid {
+                grid-template-columns: repeat(2, 1fr);
+                gap: 10px;
+            }
+
+            .instagram-item {
+                height: 120px;
+            }
+
+            .instagram-button {
+                width: 180px;
+                padding: 12px;
+                font-size: 0.9rem;
+            }
+
+            footer {
+                padding: 40px 15px;
+            }
+
+            .social-links {
+                gap: 15px;
+                margin-bottom: 20px;
+            }
+
+            .social-links a {
+                width: 30px;
+                height: 30px;
+            }
+
+            .footer-content p {
+                font-size: 0.9rem;
+                margin-bottom: 10px;
+            }
+        }
+
+        @media (max-width: 400px) {
+            .nav-dock {
+                width: 95%;
+                padding: 5px 10px;
+                gap: 8px;
+            }
+
+            .nav-dock a {
+                font-size: 10px;
+            }
+
+            .hero-candle {
+                width: 100px;
+                height: 150px;
+            }
+
+            .candle-body {
+                height: 125px;
+            }
+
+            .candle-flame {
+                width: 20px;
+                height: 30px;
+                top: -45px;
+            }
+
+            .candle-wick {
+                height: 15px;
+                top: -15px;
+            }
+
+            .cta-button {
+                padding: 8px 20px;
+                font-size: 0.8rem;
+            }
+
+            .product-image {
+                height: 180px;
+            }
+
+            .instagram-item {
+                height: 100px;
+            }
+
+            .instagram-button {
+                width: 160px;
+                font-size: 0.85rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Custom Cursor Glow -->
+    <div class="cursor-glow"></div>
+
+    <!-- Smoke Animation Container -->
+    <div class="smoke" id="smokeContainer"></div>
+
+    <!-- Theme Toggle -->
+    <div class="theme-toggle" id="themeToggle">
+        <div class="theme-toggle-slider">
+            <i class="fas fa-sun" id="themeIcon"></i>
+        </div>
+    </div>
+
+    <!-- Navigation -->
+    <nav class="nav-dock">
+        <a href="#home">Home</a>
+        <a href="#products">Candles</a>
+        <a href="#about">About</a>
+        <a href="#instagram">Instagram</a>
+    </nav>
+
+    <!-- Hero Section -->
+    <section class="hero" id="home">
+        <div class="hero-bg"></div>
+        <div class="hero-candle">
+            <div class="candle-body"></div>
+            <div class="candle-wick"></div>
+            <div class="candle-flame"></div>
+        </div>
+        <h1>Discover Your Flame</h1>
+        <p>Enter the Candleverse - where each candle is a universe of mood, scent, and ambiance.</p>
+        <button class="cta-button" onclick="scrollToSection('products')">Explore Candles</button>
+    </section>
+
+    <!-- Products Section -->
+    <section class="products" id="products">
+        <h2 class="section-title">Our Candle Collection</h2>
+        <div class="product-grid">
+            <!-- Midnight Muse -->
+            <div class="product-card" data-product="midnight-muse">
+                <div class="product-image">
+                    <img id="midnight-muse-img" src="" alt="Midnight Muse Candle">
+                    <span class="product-badge">Bestseller</span>
+                </div>
+                <div class="product-info">
+                    <h3 class="product-name">Midnight Muse</h3>
+                    <p class="product-description">A mysterious blend of dark berries, vanilla, and a hint of musk. Perfect for contemplative evenings.</p>
+                    <div class="product-price">₦12,500</div>
+                    <div class="candle-selection">
+                        <label for="midnight-muse-select">Select Candle Type:</label>
+                        <select id="midnight-muse-select" class="candle-dropdown" onchange="changeImage('midnight-muse', this.value)">
+                            <option value="standard">Standard (4oz)</option>
+                            <option value="large">Large (8oz)</option>
+                            <option value="deluxe">Deluxe (12oz)</option>
+                            <option value="gift-set">Gift Set (3-pack)</option>
+                        </select>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Golden Hour -->
+            <div class="product-card" data-product="golden-hour">
+                <div class="product-image">
+                    <img id="golden-hour-img" src="" alt="Golden Hour Candle">
+                    <span class="product-badge">New</span>
+                </div>
+                <div class="product-info">
+                    <h3 class="product-name">Golden Hour</h3>
+                    <p class="product-description">Warm notes of amber, sandalwood, and citrus. Captures the magic of sunset moments.</p>
+                    <div class="product-price">₦10,500</div>
+                    <div class="candle-selection">
+                        <label for="golden-hour-select">Select Candle Type:</label>
+                        <select id="golden-hour-select" class="candle-dropdown" onchange="changeImage('golden-hour', this.value)">
+                            <option value="standard">Standard (4oz)</option>
+                            <option value="large">Large (8oz)</option>
+                            <option value="deluxe">Deluxe (12oz)</option>
+                            <option value="gift-set">Gift Set (3-pack)</option>
+                        </select>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Zen Ember -->
+            <div class="product-card" data-product="zen-ember">
+                <div class="product-image">
+                    <img id="zen-ember-img" src="" alt="Zen Ember Candle">
+                </div>
+                <div class="product-info">
+                    <h3 class="product-name">Zen Ember</h3>
+                    <p class="product-description">Calming lavender, white tea, and jasmine. Creates a serene atmosphere for mindfulness.</p>
+                    <div class="product-price">₦9,500</div>
+                    <div class="candle-selection">
+                        <label for="zen-ember-select">Select Candle Type:</label>
+                        <select id="zen-ember-select" class="candle-dropdown" onchange="changeImage('zen-ember', this.value)">
+                            <option value="standard">Standard (4oz)</option>
+                            <option value="large">Large (8oz)</option>
+                            <option value="deluxe">Deluxe (12oz)</option>
+                            <option value="gift-set">Gift Set (3-pack)</option>
+                        </select>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Ocean Breeze -->
+            <div class="product-card" data-product="ocean-breeze">
+                <div class="product-image">
+                    <img id="ocean-breeze-img" src="" alt="Ocean Breeze Candle">
+                </div>
+                <div class="product-info">
+                    <h3 class="product-name">Ocean Breeze</h3>
+                    <p class="product-description">Fresh sea salt, cotton, and driftwood. Brings the calming essence of the coast indoors.</p>
+                    <div class="product-price">₦11,000</div>
+                    <div class="candle-selection">
+                        <label for="ocean-breeze-select">Select Candle Type:</label>
+                        <select id="ocean-breeze-select" class="candle-dropdown" onchange="changeImage('ocean-breeze', this.value)">
+                            <option value="standard">Standard (4oz)</option>
+                            <option value="large">Large (8oz)</option>
+                            <option value="deluxe">Deluxe (12oz)</option>
+                            <option value="gift-set">Gift Set (3-pack)</option>
+                        </select>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Forest Whisper -->
+            <div class="product-card" data-product="forest-whisper">
+                <div class="product-image">
+                    <img id="forest-whisper-img" src="" alt="Forest Whisper Candle">
+                </div>
+                <div class="product-info">
+                    <h3 class="product-name">Forest Whisper</h3>
+                    <p class="product-description">Earthy pine, cedarwood, and moss. Evokes the tranquility of a peaceful forest walk.</p>
+                    <div class="product-price">₦10,000</div>
+                    <div class="candle-selection">
+                        <label for="forest-whisper-select">Select Candle Type:</label>
+                        <select id="forest-whisper-select" class="candle-dropdown" onchange="changeImage('forest-whisper', this.value)">
+                            <option value="standard">Standard (4oz)</option>
+                            <option value="large">Large (8oz)</option>
+                            <option value="deluxe">Deluxe (12oz)</option>
+                            <option value="gift-set">Gift Set (3-pack)</option>
+                        </select>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Citrus Burst -->
+            <div class="product-card" data-product="citrus-burst">
+                <div class="product-image">
+                    <img id="citrus-burst-img" src="" alt="Citrus Burst Candle">
+                    <span class="product-badge">Limited Edition</span>
+                </div>
+                <div class="product-info">
+                    <h3 class="product-name">Citrus Burst</h3>
+                    <p class="product-description">Energizing blend of lemon, grapefruit, and bergamot. Perfect for boosting creativity and focus.</p>
+                    <div class="product-price">₦13,500</div>
+                    <div class="candle-selection">
+                        <label for="citrus-burst-select">Select Candle Type:</label>
+                        <select id="citrus-burst-select" class="candle-dropdown" onchange="changeImage('citrus-burst', this.value)">
+                            <option value="standard">Standard (4oz)</option>
+                            <option value="large">Large (8oz)</option>
+                            <option value="deluxe">Deluxe (12oz)</option>
+                            <option value="gift-set">Gift Set (3-pack)</option>
+                        </select>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- About Section -->
+    <section class="about" id="about">
+        <div class="about-container">
+            <h2 class="section-title">Our Story</h2>
+            <p>At Candleverse, we believe that a candle is more than just wax and wick—it's an experience, a memory, a moment of tranquility in a chaotic world. Each of our design candles is handcrafted with premium soy wax, infused with carefully selected essential oils, and designed to create a unique atmosphere in your space.</p>
+            <p>Founded in 2025, our journey began with a simple mission: to transform ordinary moments into extraordinary experiences through the power of scent and light. From our first collection of three signature scents, we've grown to offer a diverse range of candles that cater to every mood and occasion.</p>
+            <p>Every Candleverse creation is a labor of love, from the initial scent concept to the final packaging. We're committed to sustainability, using eco-friendly materials and supporting local artisans in our production process.</p>
+        </div>
+    </section>
+
+    <!-- Instagram Section -->
+    <section class="instagram" id="instagram">
+        <h2 class="section-title">Follow Our Journey</h2>
+        <div class="instagram-grid">
+            <div class="instagram-item">
+                <img src="" alt="Instagram Post">
+                <div class="instagram-overlay">
+                    <i class="fab fa-instagram"></i>
+                </div>
+            </div>
+            <div class="instagram-item">
+                <img src="" alt="Instagram Post">
+                <div class="instagram-overlay">
+                    <i class="fab fa-instagram"></i>
+                </div>
+            </div>
+            <div class="instagram-item">
+                <img src="" alt="Instagram Post">
+                <div class="instagram-overlay">
+                    <i class="fab fa-instagram"></i>
+                </div>
+            </div>
+            <div class="instagram-item">
+                <img src="" alt="Instagram Post">
+                <div class="instagram-overlay">
+                    <i class="fab fa-instagram"></i>
+                </div>
+            </div>
+        </div>
+        <a href="https://instagram.com/candleverse" target="_blank" class="instagram-button">Follow on Instagram</a>
+    </section>
+
+    <!-- Footer -->
+    <footer>
+        <div class="footer-content">
+            <div class="social-links">
+                <a href="#"><i class="fab fa-facebook-f"></i></a>
+                <a href="#"><i class="fab fa-twitter"></i></a>
+                <a href="https://instagram.com/candleverse" target="_blank"><i class="fab fa-instagram"></i></a>
+                <a href="#"><i class="fab fa-pinterest"></i></a>
+            </div>
+            <p>&copy; 2025 Candleverse. All rights reserved.</p>
+            <p>contact@candleverse.com | +234 800 123 4567</p>
+        </div>
+    </footer>
+
+    <script>
+        // Product Images Mapping
+        const productImages = {
+            'midnight-muse': {
+                'standard': '',
+                'large': '',
+                'deluxe': '',
+                'gift-set': ''
+            },
+            'golden-hour': {
+                'standard': '',
+                'large': '',
+                'deluxe': '',
+                'gift-set': ''
+            },
+            'zen-ember': {
+                'standard': '',
+                'large': '',
+                'deluxe': '',
+                'gift-set': ''
+            },
+            'ocean-breeze': {
+                'standard': '',
+                'large': '',
+                'deluxe': '',
+                'gift-set': ''
+            },
+            'forest-whisper': {
+                'standard': '',
+                'large': '',
+                'deluxe': '',
+                'gift-set': ''
+            },
+            'citrus-burst': {
+                'standard': '',
+                'large': '',
+                'deluxe': '',
+                'gift-set': ''
+            }
+        };
+
+        // Change Product Image Function
+        function changeImage(productId, candleType) {
+            const imgElement = document.getElementById(`${productId}-img`);
+            if (imgElement && productImages[productId] && productImages[productId][candleType]) {
+                // Add fade effect
+                imgElement.style.opacity = '0';
+                
+                setTimeout(() => {
+                    imgElement.src = productImages[productId][candleType];
+                    imgElement.style.opacity = '1';
+                }, 300);
+            }
+        }
+
+        // Theme Toggle
+        const themeToggle = document.getElementById('themeToggle');
+        const themeIcon = document.getElementById('themeIcon');
+        const body = document.body;
+        const smokeContainer = document.getElementById('smokeContainer');
+        let smokeInterval;
+
+        themeToggle.addEventListener('click', () => {
+            body.classList.toggle('dark-mode');
+            
+            // Change icon
+            if (body.classList.contains('dark-mode')) {
+                themeIcon.classList.remove('fa-sun');
+                themeIcon.classList.add('fa-moon');
+                startContinuousSmoke();
+            } else {
+                themeIcon.classList.remove('fa-moon');
+                themeIcon.classList.add('fa-sun');
+                stopContinuousSmoke();
+            }
+        });
+
+        // Continuous Smoke Animation
+        function startContinuousSmoke() {
+            smokeContainer.classList.add('active');
+            
+            // Create initial burst of smoke
+            for (let i = 0; i < 10; i++) {
+                setTimeout(() => {
+                    createSmokeParticle();
+                }, i * 100);
+            }
+            
+            // Set up interval for continuous smoke
+            smokeInterval = setInterval(() => {
+                createSmokeParticle();
+            }, 500);
+        }
+
+        function stopContinuousSmoke() {
+            smokeContainer.classList.remove('active');
+            clearInterval(smokeInterval);
+            
+            // Remove existing smoke particles
+            const particles = document.querySelectorAll('.smoke-particle');
+            particles.forEach(particle => {
+                particle.remove();
+            });
+        }
+
+        function createSmokeParticle() {
+            const smoke = document.createElement('div');
+            smoke.classList.add('smoke-particle');
+            
+            // Random position
+            const posX = Math.random() * window.innerWidth;
+            const size = Math.random() * 20 + 10;
+            
+            smoke.style.left = `${posX}px`;
+            smoke.style.bottom = '0px';
+            smoke.style.width = `${size}px`;
+            smoke.style.height = `${size}px`;
+            
+            smokeContainer.appendChild(smoke);
+            
+            // Remove after animation
+            setTimeout(() => {
+                smoke.remove();
+            }, 4000);
+        }
+
+        // Smooth Scrolling
+        function scrollToSection(sectionId) {
+            const section = document.getElementById(sectionId);
+            section.scrollIntoView({ behavior: 'smooth' });
+        }
+        
+        // Navigation Links
+        document.querySelectorAll('.nav-dock a').forEach(link => {
+            link.addEventListener('click', (e) => {
+                e.preventDefault();
+                const targetId = link.getAttribute('href').substring(1);
+                scrollToSection(targetId);
+            });
+        });
+        
+        // Custom Cursor Glow Effect
+        const cursorGlow = document.querySelector('.cursor-glow');
+        
+        document.addEventListener('mousemove', (e) => {
+            cursorGlow.style.left = `${e.clientX}px`;
+            cursorGlow.style.top = `${e.clientY}px`;
+        });
+        
+        // Add hover effect to interactive elements
+        const interactiveElements = document.querySelectorAll('button, a, .product-card, .candle-dropdown');
+        
+        interactiveElements.forEach(element => {
+            element.addEventListener('mouseenter', () => {
+                cursorGlow.style.transform = 'translate(-50%, -50%) scale(2)';
+                cursorGlow.style.backgroundColor = 'rgba(212, 175, 55, 0.5)';
+            });
+            
+            element.addEventListener('mouseleave', () => {
+                cursorGlow.style.transform = 'translate(-50%, -50%) scale(1)';
+                cursorGlow.style.backgroundColor = 'rgba(212, 175, 55, 0.3)';
+            });
+        });
+    </script>
+</body>
+</html>
